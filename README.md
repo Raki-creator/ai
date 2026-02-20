@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Cognitive Orchestrator
 
-## Getting Started
+A unified, self-hosted AI personal assistant built with **Django**, **Tailwind CSS**, and **SQLite**.
 
-First, run the development server:
+## 🚀 One-Command Start
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Everything runs through Django. You no longer need `npm` or `node`.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. **Install Dependencies**:
+   ```bash
+   pip install django djangorestframework django-cors-headers
+   ```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+2. **Run Server**:
+   ```bash
+   cd backend
+   python manage.py runserver
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. **Access App**:
+   Open [http://localhost:8000](http://localhost:8000) in your browser.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🛠 Tech Stack
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Backend**: Django & Django REST Framework
+- **Frontend**: Django Templates + Tailwind CSS + Alpine.js
+- **Database**: SQLite (Local only)
+- **AI**: Google Gemini (Customizable in Settings)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📁 Project Structure
 
-## Deploy on Vercel
+- `backend/`: The complete application.
+  - `api/templates/`: HTML templates for all pages.
+  - `api/models.py`: Database schema for Users, Chats, Memories, and Reminders.
+  - `api/views.py`: Logic for both HTML rendering and REST API.
+  - `db.sqlite3`: Your local personal database.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📝 Features
+
+- **Dashboard**: Bento-style grid with AI chat and process streams.
+- **Memory Vault**: Neural database for notes, articles, and snippets.
+- **Reminders**: Task management with tags and due dates.
+- **Settings**: Local encryption and AI provider configuration.
+- **Dark Mode**: Optimized for high-focus AI orchestration.

@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% block title %}Settings | Cognitive Orchestrator{% endblock %}
+
+{% block content %}
+<div class="p-8 max-w-4xl mx-auto space-y-8" x-data="settingsApp()">
+    <header>
+        <h1 class="text-3xl font-bold font-outfit text-app-text">Settings</h1>
+        <p class="text-app-muted mt-1">Configure your personal assistant and neural engine.</p>
+    </header>
+
+    <div class="space-y-6">
+        <!-- Appearance -->
+        <div class="ui-card p-8">
+            <h2 class="text-lg font-bold font-outfit text-white mb-6 flex items-center gap-3">
+                <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                Appearance
+            </h2>
+            <div>
+                <label class="block text-[10px] font-bold text-app-muted uppercase tracking-widest mb-3">Color
+                    Theme</label>
+                <div class="grid grid-cols-2 gap-4">
+                    <button @click="settings.theme = 'dark'; updateRuntimeTheme('dark')"
+                        :class="settings.theme === 'dark' ? 'bg-indigo-600 border-indigo-500 box-glow' : 'bg-white/5 border-white/5 hover:bg-white/10'"
+                        class="p-4 rounded-xl border text-sm font-bold transition-all text-center flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                        Dark Mode
+                    </button>
+                    <button @click="settings.theme = 'light'; updateRuntimeTheme('light')"
+                        :class="settings.theme === 'light' ? 'bg-indigo-600 border-indigo-500 box-glow !text-white' : 'bg-white/5 border-white/5 hover:bg-white/10'"
+                        class="p-4 rounded-xl border text-sm font-bold transition-all text-center flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                        Light Mode
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Configuration -->
+        <div class="ui-card p-8">
+            <h2 class="text-lg font-bold font-outfit text-app-text mb-6 flex items-center gap-3">
+                <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                Neural Engine
+            </h2>
+            <div class="space-y-6">
+                <div>
+                    <label class="block text-[10px] font-bold text-white/20 uppercase tracking-widest mb-3">Model
+                        Provider</label>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <template x-for="provider in ['Gemini', 'OpenAI', 'Anthropic']" :key="provider">
+                            <button @click="settings.ai_provider = provider"
+                                :class="settings.ai_provider === provider ? 'bg-indigo-600 border-indigo-500 box-glow' : 'bg-white/5 border-white/5 hover:bg-white/10'"
+                                class="p-4 rounded-xl border text-sm font-bold transition-all text-center"
+                                x-text="provider">
+                            </button>
+                        </template>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-white/20 uppercase tracking-widest mb-2 px-1">API
+                        Key</label>
+                    <input type="password" x-model="settings.api_key" placeholder="••••••••••••••••"
+                        class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500/50">
+                    <p class="text-[10px] text-white/20 mt-2 px-1 italic">Your keys are encrypted and stored locally in
+                        your SQLite database.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interface Settings -->
+        <div class="ui-card p-8">
+            <h2 class="text-lg font-bold font-outfit text-white mb-6 flex items-center gap-3">
+                <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                </svg>
+                Preferences
+            </h2>
+            <div class="space-y-4">
+                <div class="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/5">
+                    <div>
+                        <div class="text-sm font-bold">Auto-summarize chats</div>
+                        <div class="text-xs text-white/30">Generate titles for new conversations automatically.</div>
+                    </div>
+                    <button @click="settings.auto_summary = !settings.auto_summary"
+                        :class="settings.auto_summary ? 'bg-indigo-600' : 'bg-white/10'"
+                        class="w-12 h-6 rounded-full relative transition-colors">
+                        <div :class="settings.auto_summary ? 'translate-x-7' : 'translate-x-1'"
+                            class="absolute top-1 w-4 h-4 bg-white rounded-full transition-transform"></div>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex justify-end pt-4">
+            <button @click="saveSettings()" :disabled="isLoading"
+                class="px-10 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition-all shadow-lg shadow-indigo-600/20 active:scale-95 disabled:opacity-50">
+                <span x-show="!isLoading">Save Settings</span>
+                <span x-show="isLoading" class="flex items-center gap-2">
+                    <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                        </circle>
+                        <path class="opacity-75" fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                        </path>
+                    </svg>
+                    Saving...
+                </span>
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function settingsApp() {
+        return {
+            settings: {
+                ai_provider: 'Gemini',
+                api_key: '',
+                auto_summary: true,
+                theme: localStorage.getItem('app_theme') || 'dark'
+            },
+            isLoading: false,
+            async init() {
+                try {
+                    const res = await fetch('/api/auth/me/', {
+                        headers: { 'Authorization': 'Token ' + localStorage.getItem('auth_token') }
+                    });
+                    const data = await res.json();
+                    if (data.settings) {
+                        this.settings = { ...this.settings, ...data.settings };
+                        // Ensure local storage is in sync with server settings if available
+                        if (data.settings.theme) {
+                            localStorage.setItem('app_theme', data.settings.theme);
+                            this.updateRuntimeTheme(data.settings.theme);
+                        }
+                    }
+                } catch (err) {
+                    console.error(err);
+                }
+            },
+            updateRuntimeTheme(theme) {
+                if (theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+                localStorage.setItem('app_theme', theme);
+            },
+            async saveSettings() {
+                this.isLoading = true;
+                try {
+                    const res = await fetch('/api/auth/me/', {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Token ' + localStorage.getItem('auth_token')
+                        },
+                        body: JSON.stringify({ settings: this.settings })
+                    });
+                    if (res.ok) {
+                        alert('Settings saved!');
+                    }
+                } catch (err) {
+                    console.error(err);
+                } finally {
+                    this.isLoading = false;
+                }
+            }
+        }
+    }
+</script>
+{% endblock %}
